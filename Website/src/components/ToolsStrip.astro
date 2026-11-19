@@ -1,0 +1,54 @@
+---
+import { publicHas } from '../data/fsutil';
+
+/** `slug` = logo file in public/images/tools. `optional` tools appear only once an official file is supplied. */
+interface Tool { slug: string; name: string; optional?: boolean; }
+const tools: Tool[] = [
+  { slug: 'photoshop', name: 'Photoshop' },
+  { slug: 'illustrator', name: 'Illustrator' },
+  { slug: 'coreldraw', name: 'CorelDRAW' },
+  { slug: 'indesign', name: 'InDesign' },
+  { slug: 'lightroom', name: 'Lightroom' },
+  { slug: 'figma', name: 'Figma' },
+  { slug: 'adobe-xd', name: 'Adobe XD' },
+  { slug: 'after-effects', name: 'After Effects' },
+  { slug: 'premiere-pro', name: 'Premiere Pro' },
+  { slug: 'final-cut-pro', name: 'Final Cut Pro', optional: true },
+  { slug: 'davinci-resolve', name: 'DaVinci Resolve' },
+  { slug: 'animate', name: 'Adobe Animate' },
+  { slug: 'blender', name: 'Blender' },
+  { slug: 'cinema-4d', name: 'Cinema 4D' },
+  { slug: 'chatgpt', name: 'ChatGPT' },
+  { slug: 'claude', name: 'Claude' },
+  { slug: 'gemini', name: 'Gemini' },
+  { slug: 'midjourney', name: 'Midjourney' },
+  { slug: 'runway', name: 'Runway' },
+  { slug: 'freepik-ai', name: 'Freepik AI' },
+  { slug: 'adobe-firefly', name: 'Adobe Firefly', optional: true },
+  { slug: 'magnific', name: 'Magnific', optional: true },
+  { slug: 'vscode', name: 'Visual Studio Code' },
+  { slug: 'react', name: 'React' },
+  { slug: 'github', name: 'GitHub' },
+  { slug: 'vercel', name: 'Vercel' },
+];
+const find = (slug: string) => {
+  for (const ext of ['svg', 'png']) {
+    if (publicHas(`/images/tools/${slug}.${ext}`)) return `/images/tools/${slug}.${ext}`;
+  }
+  return null;
+};
+const items = tools.map((t) => ({ ...t, file: find(t.slug) })).filter((t) => t.file);
+---
+<section class="tools" aria-labelledby="tools-title">
+  <p class="tools__label" id="tools-title">Tools we create with</p>
+  <div class="tools__viewport">
+    <ul class="tools__track" style={`--n:${items.length}`}>
+      {[0, 1].map((copy) => items.map((t) => (
+        <li class="tool" aria-hidden={copy === 1 ? 'true' : undefined}>
+          <img class="tool__icon" src={t.file!} alt="" width="36" height="36" loading="lazy" />
+          <span class="tool__name">{t.name}</span>
+        </li>
+      )))}
+    </ul>
+  </div>
+</section>

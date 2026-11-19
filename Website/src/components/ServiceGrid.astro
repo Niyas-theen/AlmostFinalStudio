@@ -1,0 +1,53 @@
+---
+import { publicHas } from '../data/fsutil';
+import { layers, services } from '../data/site';
+import { cardPhotos, stackPhoto } from '../data/images';
+
+/** Row structure (12-column grid): [8 + 4], [3 + 3 + 3 + 3], [8 + 4]. */
+const arrow = 'M4 12h16m-6-6 6 6-6 6';
+const layerName = (id: string) => layers.find((l) => l.id === id)!.name;
+const tints = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7'];
+const placement = ['wide first', 'side', '', '', '', '', 'wide']; // index in the services list
+const has = publicHas;
+const photo = (slug: string) => {
+  const meta = cardPhotos[slug];
+  if (!meta) return null;
+  const large = `/images/cards/${slug}.webp`;
+  const small = `/images/cards/${slug}-800.webp`;
+  if (!has(large)) return null;
+  return { ...meta, large, small: has(small) ? small : null };
+};
+const stackLarge = '/images/cards/build-your-stack.webp';
+const stackSmall = '/images/cards/build-your-stack-560.webp';
+const stackOk = publicHas(stackLarge);
+---
+<div class="svc-grid">
+  {services.map((s, i) => {
+    const ph = photo(s.slug);
+    const wide = placement[i].includes('wide');
+    const sizes = wide ? '(min-width: 1100px) 800px, (min-width: 641px) 700px, 92vw' : '(min-width: 1100px) 360px, (min-width: 641px) 340px, 92vw';
+    return (
+      <a class={`svc-card ${tints[i]} ${placement[i].split(' ').map((p) => p && `svc-card--${p}`).join(' ')} reveal`} href={`/services/${s.slug}`} aria-label={`${s.name}: ${s.summary}`}>
+        <span class="svc-card__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d={arrow} /></svg></span>
+        <div class="svc-card__body">
+          <span class="badge svc-card__badge">{layerName(s.layer)}</span>
+          <h3>{s.name}</h3>
+          <p>{s.summary}</p>
+        </div>
+        <div class={`svc-slot${ph ? ' has-img' : ''}`} data-slot={s.slug} aria-hidden="true" style={ph ? `--pos:${ph.pos};--pos-m:${ph.posM};--ar:${ph.w}/${ph.h}` : undefined}>
+          {ph && <img src={ph.large} srcset={ph.small ? `${ph.small} 800w, ${ph.large} ${ph.w}w` : undefined} sizes={sizes} width={ph.w} height={ph.h} alt="" loading="lazy" decoding="async" />}
+        </div>
+      </a>
+    );
+  })}
+  <a class={`svc-card svc-card--cta svc-card--side reveal${stackOk ? ' svc-card--photo' : ''}`} href="/pricing" style={stackOk ? `--pos:${stackPhoto.pos};--pos-m:${stackPhoto.posM}` : undefined}>
+    {stackOk && <img class="svc-card__bg" src={stackLarge} srcset={publicHas(stackSmall) ? `${stackSmall} 560w, ${stackLarge} ${stackPhoto.w}w` : undefined} sizes="(min-width: 1100px) 416px, 92vw" width={stackPhoto.w} height={stackPhoto.h} alt="" aria-hidden="true" loading="lazy" decoding="async" />}
+    <span class="svc-card__go" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d={arrow} /></svg></span>
+    <div class="svc-card__body">
+      <span class="badge svc-card__badge">Plans</span>
+      <h3>Build your stack</h3>
+      <p>Combine services and see a monthly estimate, or request a custom quote.</p>
+    </div>
+    <span class="svc-card__cta">See pricing</span>
+  </a>
+</div>

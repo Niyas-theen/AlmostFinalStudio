@@ -1,0 +1,35 @@
+---
+import { journeyHeading, journeySummary, journeyText, journeyYears } from '../data/journey';
+import type { JourneySummary, JourneyYear } from '../data/journey';
+
+interface Props { heading?: string; text?: string; years?: JourneyYear[]; summary?: JourneySummary[]; id?: string; }
+const { heading = journeyHeading, text = journeyText, years = journeyYears, summary = journeySummary, id = 'journey' } = Astro.props;
+const max = Math.max(...years.map((y) => y.clients));
+const last = years.length - 1;
+---
+<section class="section journey" id={id} aria-labelledby={`${id}-title`}>
+  <div class="container">
+    <h2 class="journey__title reveal" id={`${id}-title`}>{heading}</h2>
+    <p class="lead center journey__text reveal">{text}</p>
+
+    <ol class="tl" aria-label="Clients by year">
+      {years.map((y, i) => (
+        <li class={`tl__item reveal${i === last ? ' tl__item--now' : ''}`} style={`--i:${i};--v:${(y.clients / max).toFixed(3)}`}>
+          <span class="tl__year">{y.year}</span>
+          <b class="tl__num">{y.clients}+</b>
+          <span class="tl__label">Clients</span>
+          <span class="tl__bar" aria-hidden="true"><i></i></span>
+        </li>
+      ))}
+    </ol>
+
+    <dl class="journey__sum">
+      {summary.map((s) => (
+        <div class="journey__metric reveal">
+          <dd class="journey__value"><span data-count={s.value} data-suffix={s.suffix}>{s.value}{s.suffix}</span></dd>
+          <dt class="journey__label">{s.label}</dt>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

@@ -1,0 +1,18 @@
+---
+import Base from '../../layouts/Base.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import { layers, services } from '../../data/site';
+---
+<Base title="Services" description="Seven creative and digital services in three layers: Identity, Experience, and Motion & Reach.">
+  <section class="section"><div class="container">
+    <p class="eyebrow">Services</p>
+    <h1 style="margin:12px 0 20px">Seven services. Three layers.</h1>
+    <p class="lead" style="margin-bottom:48px">Each service stands alone. Together they form one connected stack.</p>
+    {layers.map((l) => (
+      <div class="layer-group">
+        <div class="layer-head"><h2 style="font-size:1.75rem">{l.name}</h2><span class="muted">{l.outcome}</span></div>
+        <div class="grid grid--3">{services.filter((s) => s.layer === l.id).map((s) => <ServiceCard s={s} />)}</div>
+      </div>
+    ))}
+  </div></section>
+</Base>

@@ -1,0 +1,194 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import ToolsStrip from '../components/ToolsStrip.astro';
+import FashionStrip from '../components/FashionStrip.astro';
+import ServiceGrid from '../components/ServiceGrid.astro';
+import JourneyTimeline from '../components/JourneyTimeline.astro';
+import ReviewsSection from '../components/ReviewsSection.astro';
+import XmasDecor from '../components/XmasDecor.astro';
+import { XMAS as xmas } from '../data/site';
+import XmasLights from '../components/XmasLights.astro';
+import HeroToolsLeft from '../components/HeroToolsLeft.astro';
+import HeroToolsRight from '../components/HeroToolsRight.astro';
+import HangingOrnaments from '../components/HangingOrnaments.astro';
+const arrow = 'M4 12h16m-6-6 6 6-6 6';
+---
+<Base hero title="Almost Final | Creative and digital studio" description="Almost Final designs, builds and markets brands, from first sketch to live product. Seven disciplines, delivered in layers.">
+  <!-- Hero -->
+  <div class="hero-wrap">
+    <section class={`hero dark${xmas ? ' hero--xmas' : ''}`} aria-labelledby="h-title">
+      {xmas && <XmasDecor />}
+      {xmas && <canvas class="hero-snow" data-snow="hero" aria-hidden="true"></canvas>}
+      <div class="sidetext sidetext--l">
+        <HeroToolsLeft />
+        <p class="sidetext__title">Identity</p>
+        <p class="sidetext__line">Brand, logo and fashion design.</p>
+      </div>
+      <div class="sidetext sidetext--r">
+        <HeroToolsRight />
+        <p class="sidetext__title">Experience</p>
+        <p class="sidetext__line">Interfaces, websites and apps.</p>
+      </div>
+      <div class="gcard gcard--tr">
+        <strong>Seven services, three layers</strong>
+        One studio for identity, experience, motion and reach.<br />
+        <a href="/services">See services</a>
+      </div>
+      <div class="gcard gcard--bl">
+        <strong>Fashion subscriptions</strong>
+        Premium from ₹39,999 per month, with published plans.<br />
+        <a href="/pricing">View plans</a>
+      </div>
+      <div class="inner">
+        {xmas && <p class="xmas-pill"><i aria-hidden="true"></i>Season’s greetings from Almost Final</p>}
+        <h1 id="h-title" class="hero__title">
+          <span class="sr-only">Built in layers. Delivered in style.</span>
+          <span class="rot" aria-hidden="true">
+            <span class="rot__state"><span class="ph">Built in layers.</span> <span class="ph">Delivered in style.</span></span>
+            <span class="rot__state"><span class="ph">One studio.</span> <span class="ph">Seven disciplines.</span> <span class="ph">Zero hand-offs.</span></span>
+            <span class="rot__state"><span class="ph">Design it.</span> <span class="ph">Build it.</span> <span class="ph">Make it move.</span></span>
+          </span>
+        </h1>
+        <p class="sub">Almost Final is a multidisciplinary creative and digital studio. We design, build and market brands, from the first sketch to the live product, in layers you can add to over time.</p>
+        <div class="btns">
+          <a class="btn btn--white" href="/contact">Get started <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d={arrow} /></svg></a>
+          <a class="btn btn--secondary" href="/pricing">See pricing</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Tools strip -->
+  <ToolsStrip />
+
+  <!-- About -->
+  <section class="section deco-host">
+    {xmas && <HangingOrnaments rail items={[{ left: '2.2%', len: 84, kind: 'navy', size: 36 }, { right: '2.2%', len: 84, kind: 'navy', size: 36 }]} />}
+    <div class="container">
+      <div class="about">
+        <h2 class="reveal">So, what is Almost Final?</h2>
+        <div class="reveal stack" style="--s:16px">
+          <p class="lead">Almost Final is a growing creative and digital studio based in India, serving clients globally. It evolved from freelance creative work, begun in 2021, in graphic design, fashion design, video editing and branding.</p>
+          <p class="lead">Today the studio brings seven disciplines together, so one partner can carry a brand from first sketch to live product. Clients start with what they need now and add services in layers as they grow.</p>
+        </div>
+      </div>
+      <div class="vgrid deco-host">
+        <div class="vcard vcard--feature reveal"><Icon name="layers" /><h3>Seven disciplines, one roof</h3><p class="muted">Design, build and marketing handled by one studio instead of five freelancers.</p></div>
+        <div class="vcard reveal"><Icon name="tag" /><h3>Published prices</h3><p class="muted">Plans and starting prices are shown openly, with a visible INR and USD switch.</p></div>
+        <div class="vcard reveal"><Icon name="stack" /><h3>Start small, add layers</h3><p class="muted">Begin with one service and add others as the brand and budget grow.</p></div>
+        <div class="vcard reveal"><Icon name="globe" /><h3>India-based, global reach</h3><p class="muted">An India-based team serving clients across time zones.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <h2 class="center" style="max-width:20ch;margin-inline:auto">Why brands choose Almost Final</h2>
+      <div class="why">
+        <div class="pale reveal">
+          <span class="lbl">For new brands</span>
+          <div class="item"><Icon name="spark" /><div><h4>A complete starting point</h4><p>Identity, website and content planned together from day one.</p></div></div>
+          <div class="item"><Icon name="clock" /><div><h4>Predictable monthly plans</h4><p>Subscription plans keep costs and deliverables clear.</p></div></div>
+          <div class="item"><Icon name="chat" /><div><h4>One point of contact</h4><p>A single studio instead of coordinating several freelancers.</p></div></div>
+        </div>
+        <div class="mid reveal">
+          <span class="lbl">What makes us different</span>
+          <div class="item"><Icon name="layers" /><div><h4>The layered approach</h4><p>Identity, Experience, then Motion &amp; Reach, added when you are ready.</p></div></div>
+          <div class="item"><Icon name="tag" /><div><h4>Prices you can see</h4><p>Confirmed prices are published. Anything still draft is labelled.</p></div></div>
+          <div class="item"><Icon name="check" /><div><h4>Honest by default</h4><p>No invented clients, metrics or testimonials. Missing content is labelled.</p></div></div>
+        </div>
+        <div class="pale reveal">
+          <span class="lbl">For growing teams</span>
+          <div class="item"><Icon name="user" /><div><h4>Overflow capacity</h4><p>Agencies and in-house teams can add design or build capacity.</p></div></div>
+          <div class="item"><Icon name="stack" /><div><h4>Add services over time</h4><p>Extend from design to development to marketing without re-briefing.</p></div></div>
+          <div class="item"><Icon name="globe" /><div><h4>Global working</h4><p>Hours and reply times are agreed at onboarding.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fashion brands (inspiration only) -->
+  <FashionStrip />
+
+  <!-- Services bento -->
+  <section class="section section--tint deco-host" id="services">
+    {xmas && <HangingOrnaments rail items={[{ left: '2.2%', len: 84, kind: 'sky', size: 36 }, { right: '2.2%', len: 84, kind: 'sky', size: 36 }]} />}
+    <div class="container">
+      <h2 class="reveal center" style="max-width:22ch">Seven services for every layer of your brand</h2>
+      <p class="lead center reveal" style="margin-top:20px;text-align:center">From identity to experience to reach, each service stands alone and works together.</p>
+      <ServiceGrid />
+    </div>
+  </section>
+
+  <!-- Success timeline (owner-supplied figures, see src/data/journey.ts) -->
+  <JourneyTimeline />
+
+  <!-- Reviews: authentic client reviews only (see src/data/reviews.ts) -->
+  <ReviewsSection />
+
+  <!-- Mission -->
+  <section class="section">
+    <div class="container mission">
+      <div class="stack reveal" style="--s:20px">
+        <h2>Our mission &amp; values</h2>
+        <p class="lead">Our mission is to help brands grow with design, technology and marketing that work together. We believe in clear scope, published prices and honest communication.</p>
+        <a class="btn btn--secondary" href="/about">About the studio</a>
+      </div>
+      <div class="circle" aria-hidden="true">
+        <div class="disc"><img src="/brand/mascot.svg" alt="" width="420" height="420" loading="lazy" /></div>
+        <span class="tag t1">Long-term partnerships</span><span class="tag t2">Clear, honest scope</span><span class="tag t3">Layered growth</span><span class="tag t4">Client-first approach</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class={`cta dark${xmas ? ' cta--xmas' : ''}`}>
+        {xmas && <XmasLights class="cta__lights" arches={4} sag={34} />}
+        {xmas && <><span class="cta__bauble cta__bauble--a"></span><span class="cta__bauble cta__bauble--b"></span></>}
+        <div class="stack reveal" style="--s:20px">
+          <h2>Have a cool idea? Let’s collaborate.</h2>
+          <p class="lead" style="color:#d3e0ea">Tell us what you are building and we will suggest the right layers to start with.</p>
+          <a class="btn btn--white" href="/contact">Get started <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d={arrow} /></svg></a>
+        </div>
+        <img src="/brand/mascot.svg" alt="" width="300" height="300" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <script>
+    /* Hero headline rotation is CSS-only; this just pauses it while the tab is hidden or the hero is off-screen. */
+    const rot = document.querySelector('.rot');
+    const heroEl = document.querySelector('.hero');
+    if (rot) {
+      let inView = true;
+      const sync = () => rot.classList.toggle('is-paused', document.hidden || !inView);
+      document.addEventListener('visibilitychange', sync);
+      if (heroEl && 'IntersectionObserver' in window) new IntersectionObserver(([e]) => { inView = e.isIntersecting; sync(); }).observe(heroEl);
+    }
+  </script>
+
+  <script>
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
+        const end = Number(el.dataset.count);
+        if (end > 1000) return;
+        const io = new IntersectionObserver(([e]) => {
+          if (!e.isIntersecting) return;
+          io.disconnect();
+          const t0 = performance.now();
+          const tick = (t: number) => {
+            const p = Math.min((t - t0) / 900, 1);
+            el.textContent = String(Math.round(end * p)) + (el.dataset.suffix ?? '');
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        });
+        io.observe(el);
+      });
+    }
+  </script>
+</Base>

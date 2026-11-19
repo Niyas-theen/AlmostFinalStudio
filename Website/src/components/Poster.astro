@@ -1,0 +1,42 @@
+---
+import { publicHas } from '../data/fsutil';
+import { posterArt } from '../data/posters';
+import { bannerPhotos, cardPhotos } from '../data/images';
+interface Props { slug: string; wide?: boolean; alt?: string; }
+const { slug, wide = false, alt = '' } = Astro.props;
+const art = posterArt[slug];
+const has = publicHas;
+
+/* 1. Real photo (service-page banner or card photo), if the files exist. */
+const b = bannerPhotos[slug];
+const large = b?.file ?? (cardPhotos[slug] ? `/images/cards/${slug}.webp` : null);
+const smallCandidate = b?.file1200 ?? `/images/cards/${slug}-800.webp`;
+const photoOk = !!(b && large && has(large));
+const small = photoOk && has(smallCandidate) ? smallCandidate : null;
+const smallW = b?.file1200 ? 1200 : 800;
+
+/* 2. Collage poster with a cutout, if supplied. */
+const hasCutout = has(`/images/cutouts/${slug}.png`);
+---
+{photoOk ? (
+  <img
+    class={`poster-fallback poster-photo${wide ? ' poster-fallback--wide' : ''}`}
+    src={large!}
+    srcset={small ? `${small} ${smallW}w, ${large} ${b.w}w` : undefined}
+    sizes="(min-width: 1440px) 1296px, 92vw"
+    width={b.w}
+    height={b.h}
+    alt={alt || b.alt}
+    style={`--pos:${b.pos};--pos-m:${b.posM}`}
+    loading="lazy"
+    decoding="async"
+  />
+) : hasCutout ? (
+  <div class={`poster${wide ? ' poster--wide' : ''}`} style={`background:${art.bg}`} role="img" aria-label={alt}>
+    <svg class="poster__art" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" set:html={art.shapes} />
+    <img class="poster__cut" src={`/images/cutouts/${slug}.png`} alt="" loading="lazy" />
+    <span class="poster__grain" aria-hidden="true"></span>
+  </div>
+) : (
+  <img class={`poster-fallback${wide ? ' poster-fallback--wide' : ''}`} src={`/images/cat-${slug}.svg`} alt={alt} width="800" height="600" loading="lazy" />
+)}

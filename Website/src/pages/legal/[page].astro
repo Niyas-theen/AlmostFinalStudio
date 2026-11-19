@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+export function getStaticPaths() {
+  return [{ params: { page: 'privacy' }, props: { t: 'Privacy policy' } }, { params: { page: 'terms' }, props: { t: 'Terms of service' } }, { params: { page: 'cookies' }, props: { t: 'Cookie policy' } }];
+}
+const { t } = Astro.props;
+---
+<Base title={t} description={`${t} placeholder for Almost Final.`}>
+  <section class="section"><div class="container" style="max-width:760px">
+    <h1 style="margin-bottom:24px">{t}</h1>
+    <div class="notice">Placeholder. The final text will be supplied by the studio owner or a lawyer before launch.</div>
+  </div></section>
+</Base>

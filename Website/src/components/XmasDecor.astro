@@ -1,0 +1,43 @@
+---
+import HangingOrnaments from './HangingOrnaments.astro';
+/** Seasonal hero decoration. Remove <XmasDecor /> and the `xmas` class on the hero to end the theme. */
+const quad = (p0: number[], p1: number[], p2: number[], t: number) => [
+  (1 - t) ** 2 * p0[0] + 2 * (1 - t) * t * p1[0] + t ** 2 * p2[0],
+  (1 - t) ** 2 * p0[1] + 2 * (1 - t) * t * p1[1] + t ** 2 * p2[1],
+];
+const bulbCols = ['#8fd3ff', '#ffffff', '#4c8ae8', '#ffd35c'];
+const arches = [[[-20, 8], [360, 150], [720, 8]], [[720, 8], [1080, 150], [1460, 8]]];
+const bulbs: { x: number; y: number; c: string; d: number }[] = [];
+arches.forEach(([a, b, c], ai) => {
+  for (let i = 1; i < 14; i++) {
+    const [x, y] = quad(a, b, c, i / 14);
+    bulbs.push({ x, y: y + 6, c: bulbCols[(i + ai) % 4], d: (i * 0.37) % 2 });
+  }
+});
+const pine = (x: number, s: number) => `<g transform="translate(${x} ${240 - 140 * s}) scale(${s})"><rect x="-6" y="118" width="12" height="22" fill="#5a3a22"/><path d="M0 0 L38 52 H-38Z" fill="#1c6b46"/><path d="M0 34 L48 96 H-48Z" fill="#17583a"/><path d="M0 74 L58 140 H-58Z" fill="#124a31" transform="translate(0 -8)"/><path d="M0 0 L16 22 q-8 6 -16 0 q-8 6 -16 0Z" fill="#fff"/><path d="M-30 44 q30 12 60 0 L40 52 H-40Z" fill="#fff" opacity=".9"/></g>`;
+const trees = [[70, 1.1], [150, 0.8], [215, 0.6], [1300, 1.15], [1215, 0.8], [1150, 0.55]].map(([x, s]) => pine(x, s)).join('');
+const stars = [[15, 24], [31, 62], [70, 18], [86, 55], [8, 70], [93, 82]];
+---
+<div class="xmas" aria-hidden="true">
+  <div class="xmas__cloud xmas__cloud--l"></div>
+  <div class="xmas__cloud xmas__cloud--r"></div>
+  {stars.map(([l, t], i) => <i class="xmas__star" style={`left:${l}%;top:${t}%;animation-delay:${-i * 0.8}s`}></i>)}
+  <svg class="xmas__lights" viewBox="0 0 1440 140" preserveAspectRatio="xMidYMin slice">
+    {arches.map(([a, b, c]) => <path d={`M${a} Q${b} ${c}`} fill="none" stroke="#12301f" stroke-width="2.5" />)}
+    {bulbs.map((b) => (
+      <g class="xmas__bulb" style={`animation-delay:${-b.d}s`}>
+        <circle cx={b.x} cy={b.y} r="13" fill={b.c} opacity=".28" />
+        <rect x={b.x - 3} y={b.y - 11} width="6" height="6" rx="1" fill="#12301f" />
+        <ellipse cx={b.x} cy={b.y + 1} rx="5.5" ry="8" fill={b.c} />
+        <ellipse cx={b.x - 1.8} cy={b.y - 2} rx="1.5" ry="2.6" fill="#fff" opacity=".7" />
+      </g>
+    ))}
+  </svg>
+  <HangingOrnaments items={[{ left: '2.6%', len: 112, kind: 'navy', size: 40 }, { left: '5.8%', len: 60, kind: 'frost', size: 34, delay: -1.6 }, { right: '2.6%', len: 112, kind: 'navy', size: 40, delay: -0.8 }, { right: '5.8%', len: 60, kind: 'frost', size: 34, delay: -2.4 }]} />
+  <svg class="xmas__hills" viewBox="0 0 1440 240" preserveAspectRatio="none">
+    <path d="M0 120 C200 60 380 90 560 120 S940 70 1160 100 S1360 90 1440 70 V240 H0Z" fill="#cfe3ee" />
+    <path d="M0 150 C220 100 420 140 640 150 S1000 110 1200 140 S1380 130 1440 120 V240 H0Z" fill="#e8f2f8" />
+    <path d="M0 190 C260 150 520 190 760 180 S1180 150 1440 175 V240 H0Z" fill="#fff" />
+  </svg>
+  <svg class="xmas__trees" viewBox="0 0 1440 240" preserveAspectRatio="xMidYMax slice" set:html={trees} />
+</div>

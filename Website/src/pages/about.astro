@@ -1,0 +1,23 @@
+---
+import { publicHas } from '../data/fsutil';
+import Base from '../layouts/Base.astro';
+import { aboutPhoto } from '../data/images';
+const has = publicHas;
+const photo = has('/images/banners/about.webp');
+const small = photo && has('/images/banners/about-800.webp');
+---
+<Base title="About" description="Almost Final is a growing creative and digital studio based in India that evolved from freelance creative work.">
+  <section class="section"><div class="container" style="max-width:900px">
+    <p class="eyebrow">About</p>
+    <h1 style="margin:12px 0 24px">A growing studio with a layered way of working</h1>
+    <div class="stack" style="--s:20px">
+      <p class="lead">Almost Final is a multidisciplinary creative and digital studio based in India, serving clients globally. It grew out of freelance creative work in graphic design, fashion design, video editing and branding, begun in 2021.</p>
+      <p class="lead">The studio now brings seven disciplines together so clients can work with one partner instead of five freelancers: Graphic Design, Fashion Design, UI/UX Design, Website Development, Mobile App Development, Video Editing and Social Media Marketing.</p>
+      <p class="lead">We work in layers. Clients start with what they need now and add services as the brand grows.</p>
+    </div>
+    {photo && <img class="page-photo" src="/images/banners/about.webp" srcset={small ? '/images/banners/about-800.webp 800w, /images/banners/about.webp 1672w' : undefined} sizes="(min-width: 960px) 900px, 92vw" width={aboutPhoto.w} height={aboutPhoto.h} alt={aboutPhoto.alt} loading="lazy" decoding="async" />}
+    <div class="bar-rule" style="margin-block:40px"></div>
+    <p class="muted">Studio founded and led by Niyastheen N.</p>
+    <a class="btn btn--primary" style="margin-top:24px" href="/contact">Get started</a>
+  </div></section>
+</Base>

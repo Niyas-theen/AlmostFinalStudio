@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://almostfinalstudio.com/sitemap-index.xml

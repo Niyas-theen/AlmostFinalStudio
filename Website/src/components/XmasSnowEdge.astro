@@ -1,0 +1,16 @@
+---
+/** Snow overhang with small icicles, placed along the top edge of a dark block. */
+const n = 26, W = 1440;
+let d = `M0 0 H${W} V26`;
+const step = W / n;
+for (let i = n; i > 0; i--) {
+  const x1 = i * step, x0 = (i - 1) * step, mid = (x0 + x1) / 2;
+  d += ` Q${x1 - step * 0.1} ${40 + ((i * 7) % 5) * 5} ${mid} ${34 + ((i * 11) % 4) * 4} Q${x0 + step * 0.1} ${38 + ((i * 5) % 4) * 4} ${x0} 26`;
+}
+d += ' Z';
+const ice = Array.from({ length: 9 }, (_, i) => { const x = 90 + i * 160 + ((i * 37) % 40); const h = 24 + ((i * 13) % 5) * 7; return `<path d="M${x - 5} 34 L${x} ${34 + h} L${x + 5} 34Z" fill="#dff0fa"/>`; }).join('');
+---
+<svg class="xsnow" viewBox={`0 0 ${W} 80`} preserveAspectRatio="none" aria-hidden="true">
+  <path d={d} fill="#fff" />
+  <g set:html={ice} />
+</svg>

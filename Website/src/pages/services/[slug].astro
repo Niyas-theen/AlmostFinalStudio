@@ -1,0 +1,48 @@
+---
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import Poster from '../../components/Poster.astro';
+import Pricing from '../../components/Pricing';
+import { services, plans, layers, getService } from '../../data/site';
+export function getStaticPaths() { return services.map((s) => ({ params: { slug: s.slug }, props: { s } })); }
+const { s } = Astro.props;
+const layer = layers.find((l) => l.id === s.layer)!;
+const hasPlans = plans.some((p) => p.service === s.slug);
+---
+<Base title={s.name} description={`${s.summary} ${s.outcome}`}>
+  <section class="section"><div class="container">
+    <p class="eyebrow">{layer.name} layer</p>
+    <h1 style="margin:12px 0 20px;max-width:16ch">{s.name}</h1>
+    <p class="lead">{s.outcome}</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:28px">
+      <a class="btn btn--primary" href={`/contact?service=${s.slug}`}>{s.quoteOnly ? 'Get a Custom Quote' : 'Get started'}</a>
+      <a class="btn btn--secondary" href="/pricing">See pricing</a>
+    </div>
+    <div style="margin-top:40px"><Poster slug={s.slug} wide /></div>
+  </div></section>
+
+  <section class="section section--ink"><div class="container grid grid--2">
+    <div><h2 style="font-size:2rem;margin-bottom:16px">What is included</h2>
+      <ul class="plain check">{s.includes.map((i) => <li>{i}</li>)}</ul></div>
+    <div><h2 style="font-size:2rem;margin-bottom:16px">How it works in layers</h2>
+      <ol class="steps">{s.steps.map((st) => <li><h3>{st.title}</h3><p class="muted">{st.text}</p></li>)}</ol></div>
+  </div></section>
+
+  <section class="section"><div class="container">
+    <h2 style="font-size:2.25rem;margin-bottom:12px">{hasPlans ? 'Pricing' : 'Get a quote'}</h2>
+    <p class="muted" style="margin-bottom:28px">{s.model}</p>
+    {hasPlans ? <Pricing client:load service={s.slug} /> : <div class="card"><p class="lead">This service is quoted individually after a short scoping conversation.</p><a class="btn btn--primary" style="margin-top:20px" href={`/contact?service=${s.slug}`}>Get a Custom Quote</a></div>}
+  </div></section>
+
+  <section class="section section--ink"><div class="container">
+    <h2 style="font-size:2.25rem;margin-bottom:12px">Related work</h2>
+    <div class="empty"><p class="muted">No published projects for this service yet.</p></div>
+  </div></section>
+
+  <section class="section"><div class="container" style="max-width:900px">
+    <h2 style="font-size:2.25rem;margin-bottom:20px">Questions</h2>
+    <Faq items={s.faq} />
+    <h3 style="margin:48px 0 16px">Pairs well with</h3>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">{s.related.map((r) => <a class="btn btn--secondary" href={`/services/${r}`}>{getService(r).name}</a>)}</div>
+  </div></section>
+</Base>

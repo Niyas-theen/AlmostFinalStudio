@@ -1,0 +1,43 @@
+---
+/**
+ * Floating AI assistant (visual only for now).
+ *
+ * - Fixed to the bottom-right of the viewport; see `.ai-assistant` in global.css.
+ * - NOT clickable and no chat is implemented: no API, backend or third-party service is used.
+ * - Motion is layered on separate elements (entrance > float > tilt > hover) so the transforms never conflict.
+ * - To add chat later, render it with `interactive` (a real <button data-ai-assistant-trigger>) and attach the
+ *   open/close behaviour to that attribute. Nothing else in the layout needs to change.
+ */
+interface Props {
+  /** Accessible name. */
+  label?: string;
+  /** Base path of the optimised image files (without size suffix and extension). */
+  src?: string;
+  /** Renders a real button for a future chat trigger. Off by default so it does not look or behave clickable. */
+  interactive?: boolean;
+}
+const { label = 'Almost Final AI Assistant', src = '/images/assistant/ai-assistant', interactive = false } = Astro.props;
+const Tag = interactive ? 'button' : 'div';
+---
+<Tag
+  class={`ai-assistant${interactive ? ' ai-assistant--interactive' : ''}`}
+  data-ai-assistant
+  {...(interactive ? { type: 'button', 'data-ai-assistant-trigger': '', 'aria-label': label } : { role: 'img', 'aria-label': label })}
+>
+  <span class="ai-assistant__float" aria-hidden="true">
+    <span class="ai-assistant__glow"></span>
+    <span class="ai-assistant__tilt">
+      <img
+        class="ai-assistant__img"
+        src={`${src}-360.webp`}
+        srcset={`${src}-180.webp 180w, ${src}-360.webp 360w`}
+        sizes="(min-width: 1100px) 88px, (min-width: 641px) 76px, 62px"
+        width="360"
+        height="360"
+        alt=""
+        decoding="async"
+        draggable="false"
+      />
+    </span>
+  </span>
+</Tag>

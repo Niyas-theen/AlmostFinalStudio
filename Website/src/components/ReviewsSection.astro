@@ -1,0 +1,66 @@
+---
+import ReviewCard from './ReviewCard.astro';
+import { getReviews, reviewsHeading, reviewsSubtitle } from '../data/reviews';
+
+/** Production: authentic reviews only (or an empty state). Dev server: labelled samples fill empty slots. */
+const { items, hasSamples } = getReviews(import.meta.env.DEV);
+const count = items.length;
+const marquee = count >= 4;           // two scrolling rows only when there are enough reviews to avoid awkward repeats
+const split = Math.ceil(count / 2);
+const rows = marquee ? [items.slice(0, split), items.slice(split)] : [];
+/** Repeat a short row so one half of the track is always wider than the viewport (copies are aria-hidden). */
+const half = (row: typeof items) => {
+  const reps = Math.max(1, Math.ceil(6 / row.length));
+  return Array.from({ length: reps }, (_, k) => row.map((review) => ({ review, hidden: k > 0 }))).flat();
+};
+---
+<section class="stories reviews dark" id="reviews" aria-labelledby="reviews-title" data-marquee={marquee ? 'true' : 'false'}>
+  <div class="container center">
+    <h2 class="reviews__title reveal" id="reviews-title">{reviewsHeading}</h2>
+    <p class="lead center reviews__sub reveal">{reviewsSubtitle}</p>
+    {marquee && <button class="rev-toggle" type="button" aria-pressed="false">Pause scrolling</button>}
+    {hasSamples && <p class="rev-note" role="note">Design preview only: sample cards are shown in development and never appear in production.</p>}
+  </div>
+
+  {count === 0 && (
+    <div class="container">
+      <div class="rev-empty">
+        <p class="rev-empty__title">Client reviews will appear here</p>
+        <p class="rev-empty__text">Only genuine reviews from clients are published on this page. They will be added as they are collected.</p>
+      </div>
+    </div>
+  )}
+
+  {count > 0 && !marquee && (
+    <div class="container">
+      <ul class="rev-static">{items.map((review) => <li class="rev-item"><ReviewCard review={review} /></li>)}</ul>
+    </div>
+  )}
+
+  {marquee && (
+    <div class="rev-rows">
+      {rows.map((row, ri) => {
+        const one = half(row);
+        const n = one.length;
+        return (
+          <div class={`rev-row ${ri === 0 ? 'rev-row--ltr' : 'rev-row--rtl'}`} tabindex="0" role="group" aria-label={`Client reviews, row ${ri + 1}. Scrolling pauses on hover or focus.`}>
+            <ul class="rev-track" style={`--n:${n}`}>
+              {one.map(({ review, hidden }) => <li class="rev-item" aria-hidden={hidden ? 'true' : undefined}><ReviewCard review={review} /></li>)}
+              {one.map(({ review }) => <li class="rev-item" aria-hidden="true"><ReviewCard review={review} /></li>)}
+            </ul>
+          </div>
+        );
+      })}
+    </div>
+  )}
+</section>
+
+<script>
+  const sec = document.getElementById('reviews');
+  const btn = sec?.querySelector<HTMLButtonElement>('.rev-toggle');
+  btn?.addEventListener('click', () => {
+    const paused = sec!.classList.toggle('is-paused');
+    btn.setAttribute('aria-pressed', String(paused));
+    btn.textContent = paused ? 'Resume scrolling' : 'Pause scrolling';
+  });
+</script>

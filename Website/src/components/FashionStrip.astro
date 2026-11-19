@@ -1,0 +1,50 @@
+---
+import { publicHas } from '../data/fsutil';
+
+/**
+ * Fashion brands shown for visual inspiration only. NOT clients or partners.
+ * `optional` entries appear automatically once an official logo file exists in public/images/fashion/.
+ */
+interface Brand { slug: string; name: string; optional?: boolean; }
+const brands: Brand[] = [
+  { slug: 'hrx', name: 'HRX', optional: true },
+  { slug: 'zara', name: 'Zara' },
+  { slug: 'nike', name: 'Nike' },
+  { slug: 'frozen-fox', name: 'Frozen Fox', optional: true },
+  { slug: 'handm', name: 'H&M' },
+  { slug: 'puma', name: 'Puma' },
+  { slug: 'roadster', name: 'Roadster', optional: true },
+  { slug: 'uniqlo', name: 'Uniqlo' },
+  { slug: 'adidas', name: 'Adidas' },
+  { slug: 'the-souled-store', name: 'The Souled Store', optional: true },
+  { slug: 'bata', name: 'Bata' },
+  { slug: 'newbalance', name: 'New Balance' },
+  { slug: 'bewakoof', name: 'Bewakoof', optional: true },
+  { slug: 'thenorthface', name: 'The North Face' },
+  { slug: 'reebok', name: 'Reebok' },
+  { slug: 'snitch', name: 'Snitch', optional: true },
+  { slug: 'fila', name: 'Fila' },
+  { slug: 'underarmour', name: 'Under Armour' },
+  { slug: 'jordan', name: 'Jordan' },
+];
+const find = (slug: string) => {
+  for (const ext of ['svg', 'png']) {
+    if (publicHas(`/images/fashion/${slug}.${ext}`)) return `/images/fashion/${slug}.${ext}`;
+  }
+  return null;
+};
+const items = brands.map((b) => ({ ...b, file: find(b.slug) })).filter((b) => b.file);
+---
+<section class="tools tools--brands" aria-labelledby="brands-title">
+  <h2 class="tools__label" id="brands-title">Fashion Brands &amp; Industry Inspiration</h2>
+  <div class="tools__viewport">
+    <ul class="tools__track" style={`--n:${items.length}`}>
+      {[0, 1].map((copy) => items.map((b) => (
+        <li class="brand" aria-hidden={copy === 1 ? 'true' : undefined}>
+          <img src={b.file!} alt={copy === 0 ? b.name : ''} height="34" loading="lazy" />
+        </li>
+      )))}
+    </ul>
+  </div>
+  <p class="tools__note">Logos are shown only to illustrate the fashion category and are trademarks of their respective owners. No partnership, client relationship or endorsement is implied.</p>
+</section>

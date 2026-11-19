@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+import Pricing from '../components/Pricing';
+import StackBuilder from '../components/StackBuilder';
+---
+<Base title="Pricing" description="Published plans and starting prices in INR and USD. Quote-only work goes through a Custom Quote.">
+  <section class="section"><div class="container">
+    <p class="eyebrow">Pricing</p>
+    <h1 style="margin:12px 0 20px">Clear prices, in your currency</h1>
+    <p class="lead" style="margin-bottom:24px">Indian visitors see INR by default; everyone else sees USD. Use the switch to change it.</p>
+    <div class="notice" style="margin-bottom:40px">Draft: all USD prices and all non-fashion plans are proposals awaiting owner confirmation. Taxes (GST) extra. Cancellation and pause terms are pending.</div>
+    <Pricing client:load />
+  </div></section>
+  <section class="section section--ink"><div class="container">
+    <h2 style="margin-bottom:28px">Build your stack</h2>
+    <StackBuilder client:visible />
+  </div></section>
+</Base>

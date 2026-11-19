@@ -1,0 +1,288 @@
+---
+import '../styles/global.css';
+import { nav, services, XMAS } from '../data/site';
+import XmasSnowEdge from '../components/XmasSnowEdge.astro';
+import XmasLights from '../components/XmasLights.astro';
+import FloatingAIAssistant from '../components/FloatingAIAssistant.astro';
+interface Props { title: string; description: string; hero?: boolean; }
+const { title, description, hero = false } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const full = title.includes('Almost Final') ? title : `${title} | Almost Final`;
+const links = nav.filter((n) => n.href !== '/services');
+---
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{full}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#0B263D" />
+    <meta property="og:title" content={full} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <script is:inline>document.documentElement.classList.replace('no-js', 'js')</script>
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org', '@type': 'Organization', name: 'Almost Final', url: 'https://almostfinalstudio.com',
+      description: 'A multidisciplinary creative and digital studio based in India, serving global clients.',
+    })} />
+  </head>
+  <body class={XMAS ? 'xmas-theme' : ''}>
+    {XMAS && <canvas class="site-snow" data-snow="fixed" aria-hidden="true"></canvas>}
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="site-header nav-init" data-nav={hero ? 'full' : 'compact'}>
+      <div class="pill">
+        <a class="logo" href="/" aria-label="Almost Final, home"><img src="/brand/wordmark.svg" alt="Almost Final" width="88" height="44" /></a>
+        <nav class="nav" aria-label="Primary">
+          <div class="dd">
+            <button type="button" aria-haspopup="true" aria-expanded="false">Services <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 4l4 4 4-4" /></svg></button>
+            <ul>
+              <li><a href="/services">All services</a></li>
+              {services.map((s) => <li><a href={`/services/${s.slug}`}>{s.name}</a></li>)}
+            </ul>
+          </div>
+          {links.map((n) => <a href={n.href} aria-current={path.startsWith(n.href) ? 'page' : undefined}>{n.label}</a>)}
+        </nav>
+        <div class="pill__right">
+          <a class="btn btn--white header-cta" href="/contact">Get started <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h16m-6-6 6 6-6 6" /></svg></a>
+          <button class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="mobile-nav">Menu</button>
+        </div>
+      </div>
+      <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile">
+        <a href="/services">Services</a>
+        {links.map((n) => <a href={n.href}>{n.label}</a>)}
+        <a href="/contact">Get started</a>
+      </nav>
+    </header>
+    <main id="main" class={hero ? '' : 'pad-top'}><slot /></main>
+    <script is:inline>
+      /* Set the correct nav state before first paint (e.g. when the page is restored mid-scroll). */
+      (function () {
+        var h = document.querySelector('.site-header'), hero = document.querySelector('.hero-wrap');
+        if (!h) return;
+        h.dataset.nav = !hero || hero.getBoundingClientRect().bottom < 96 ? 'compact' : 'full';
+      })();
+    </script>
+    <footer class={`site-footer dark${XMAS ? ' site-footer--xmas' : ''}`}>
+      {XMAS && <XmasSnowEdge />}
+      <div class="container">
+        <div class="foot-grid">
+          <div class="stack">
+            <h4>Our services</h4>
+            <ul>{services.map((s) => <li><a href={`/services/${s.slug}`}>{s.name}</a></li>)}</ul>
+          </div>
+          <div>
+            <h4>Studio</h4>
+            <ul>
+              <li><a href="/">Home</a></li>
+              {links.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+            </ul>
+          </div>
+          <div>
+            <h4>Location</h4>
+            <p style="color:#b8c8d4">India. Serving clients globally.</p>
+            <p style="color:#b8c8d4;margin-top:8px">Business email to be confirmed.</p>
+          </div>
+          <div>
+            <h4>Subscribe</h4>
+            <p style="color:#b8c8d4;margin-bottom:12px">Updates by email will be available once the mailing service is approved.</p>
+            <form class="sub" onsubmit="return false">
+              <label class="sr-only" for="sub-email">Email</label>
+              <input id="sub-email" type="email" placeholder="Your email" disabled />
+              <button class="btn btn--primary" type="button" disabled>Subscribe</button>
+            </form>
+          </div>
+        </div>
+        <div class="foot-bottom">
+          <span>© {new Date().getFullYear()} Almost Final. Prices exclude taxes.{XMAS && <em class="foot-greet"> Wishing you a joyful season.</em>}</span>
+          <span style="display:flex;gap:20px"><a href="/legal/privacy">Privacy Policy</a><a href="/legal/terms">Terms</a><a href="/legal/cookies">Cookies</a></span>
+        </div>
+      </div>
+      <div class="container foot-brand">
+        <img class="foot-brand__img" src="/images/Footer%20logo-03.png" width="4500" height="2250" alt="" aria-hidden="true" loading="lazy" decoding="async" />
+      </div>
+      {XMAS && <XmasLights class="foot-lights" arches={5} sag={22} />}
+    </footer>
+    <FloatingAIAssistant />
+    <script>
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        type F = { x: number; y: number; r: number; v: number; p: number; s: number; glyph: boolean; rot: number; spin: number };
+        const fields: { cv: HTMLCanvasElement; ctx: CanvasRenderingContext2D; w: number; h: number; flakes: F[]; fixed: boolean; visible: boolean }[] = [];
+        const make = (w: number, h: number, initial: boolean): F => {
+          const r = 1 + Math.random() * 2.6;
+          return { x: Math.random() * w, y: initial ? Math.random() * h : -12, r, v: 18 + r * 9 + Math.random() * 10, p: Math.random() * 6.28, s: 6 + Math.random() * 12, glyph: r > 2.3 && Math.random() < 0.55, rot: Math.random() * 6.28, spin: (Math.random() - 0.5) * 0.6 };
+        };
+        const size = (f: (typeof fields)[number]) => {
+          const box = f.fixed ? { width: innerWidth, height: innerHeight } : f.cv.parentElement!.getBoundingClientRect();
+          const dpr = Math.min(devicePixelRatio || 1, innerWidth < 700 ? 1.5 : 2);
+          f.w = box.width; f.h = box.height;
+          f.cv.width = Math.round(f.w * dpr); f.cv.height = Math.round(f.h * dpr); f.cv.style.width = f.w + 'px'; f.cv.style.height = f.h + 'px';
+          f.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          const n = Math.max(10, Math.min(f.fixed ? 26 : 34, Math.round(f.w / (f.fixed ? 48 : 42))));
+          f.flakes = Array.from({ length: n }, () => make(f.w, f.h, true));
+        };
+        const glyph = (ctx: CanvasRenderingContext2D, f: F) => {
+          ctx.save(); ctx.translate(f.x, f.y); ctx.rotate(f.rot); ctx.lineCap = 'round';
+          for (const [lw, col] of [[2.6, 'rgba(70,130,205,.45)'], [1.1, 'rgba(255,255,255,.95)']] as const) {
+            ctx.lineWidth = lw; ctx.strokeStyle = col; ctx.beginPath();
+            for (let k = 0; k < 3; k++) { const a = (k * Math.PI) / 3, dx = Math.cos(a) * f.r * 1.6, dy = Math.sin(a) * f.r * 1.6; ctx.moveTo(-dx, -dy); ctx.lineTo(dx, dy); }
+            ctx.stroke();
+          }
+          ctx.restore();
+        };
+        let last = performance.now(), raf = 0;
+        const frame = (t: number) => {
+          const dt = Math.min((t - last) / 1000, 0.05); last = t;
+          for (const fl of fields) {
+            if (!fl.visible) continue;
+            const { ctx, w, h } = fl; ctx.clearRect(0, 0, w, h);
+            for (const f of fl.flakes) {
+              f.y += f.v * dt; f.x += Math.sin(t / 1800 + f.p) * f.s * dt; f.rot += f.spin * dt;
+              if (f.y > h + 12) Object.assign(f, make(w, h, false));
+              if (f.x < -12) f.x = w + 12; else if (f.x > w + 12) f.x = -12;
+              if (f.glyph) { glyph(ctx, f); continue; }
+              ctx.fillStyle = 'rgba(70,130,205,.3)'; ctx.beginPath(); ctx.arc(f.x, f.y, f.r + 1, 0, 6.28); ctx.fill();
+              ctx.fillStyle = 'rgba(255,255,255,.92)'; ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, 6.28); ctx.fill();
+            }
+          }
+          raf = requestAnimationFrame(frame);
+        };
+        document.querySelectorAll<HTMLCanvasElement>('canvas[data-snow]').forEach((cv) => {
+          const f = { cv, ctx: cv.getContext('2d')!, w: 0, h: 0, flakes: [] as F[], fixed: cv.dataset.snow === 'fixed', visible: true };
+          size(f); fields.push(f);
+          if (!f.fixed) new IntersectionObserver(([e]) => { f.visible = e.isIntersecting; }).observe(cv);
+        });
+        if (fields.length) {
+          const start = () => { cancelAnimationFrame(raf); last = performance.now(); raf = requestAnimationFrame(frame); };
+          start();
+          let rz = 0; addEventListener('resize', () => { clearTimeout(rz); rz = window.setTimeout(() => fields.forEach(size), 150); });
+          document.addEventListener('visibilitychange', () => (document.hidden ? cancelAnimationFrame(raf) : start()));
+        }
+      }
+    </script>
+    <script>
+      /* Adaptive "Dynamic Island" navigation: one component, three states on header[data-nav]:
+         full (hero visible) | compact (past the hero) | expanded (compact + hover / tap / keyboard focus). */
+      const header = document.querySelector<HTMLElement>('.site-header');
+      const pill = header?.querySelector<HTMLElement>('.pill');
+      if (header && pill) {
+        const mobileNav = document.getElementById('mobile-nav');
+        const menuBtn = document.getElementById('menu-btn');
+        const dd = header.querySelector<HTMLElement>('.dd');
+        const ddBtn = dd?.querySelector<HTMLButtonElement>('button');
+        const hero = document.querySelector('.hero-wrap');
+        const mobile = matchMedia('(max-width: 1023px)');
+        let pastHero = !hero;      // pages without the homepage hero start compact
+        let expanded = false;
+        let timer = 0;
+        let lastExpandAt = -1000; // time the island last opened from compact
+
+        const kbFocusInside = () => { const a = document.activeElement; return !!a && header.contains(a) && a.matches(':focus-visible'); };
+        const mobileOpen = () => !!mobileNav?.classList.contains('open');
+        const setMobile = (open: boolean) => { mobileNav?.classList.toggle('open', open); menuBtn?.setAttribute('aria-expanded', String(open)); };
+        const closeDropdown = () => { dd?.classList.remove('is-open'); ddBtn?.setAttribute('aria-expanded', 'false'); };
+
+        const render = () => {
+          const mode = !pastHero ? 'full' : expanded ? 'expanded' : 'compact';
+          if (header.dataset.nav !== mode) header.dataset.nav = mode;
+          if (mode !== 'expanded') { closeDropdown(); setMobile(false); }
+        };
+        const expand = () => { clearTimeout(timer); if (!pastHero) return; if (header.dataset.nav === 'compact') lastExpandAt = performance.now(); expanded = true; render(); };
+        const collapse = (force = false) => {
+          clearTimeout(timer);
+          if (!pastHero) return;
+          if (!force && (kbFocusInside() || dd?.classList.contains('is-open') || mobileOpen())) return;
+          expanded = false; render();
+        };
+        const collapseSoon = () => { clearTimeout(timer); timer = window.setTimeout(() => collapse(), 200); };
+
+        /* exact pixel width for the full bar, so the width transition is always px -> px */
+        const setWidth = () => header.style.setProperty('--full-w', Math.min(1100, header.clientWidth * 0.9) + 'px');
+        setWidth();
+        if ('ResizeObserver' in window) new ResizeObserver(setWidth).observe(header); else addEventListener('resize', setWidth);
+
+        /* hero boundary: works in both scroll directions */
+        let released = false;
+        const ready = () => { if (released) return; released = true; window.setTimeout(() => header.classList.remove('nav-init'), 80); };
+        if (hero && 'IntersectionObserver' in window) {
+          new IntersectionObserver(([e]) => {
+            pastHero = !e.isIntersecting && e.boundingClientRect.top < 0;
+            if (!pastHero) expanded = false; else if (kbFocusInside()) expanded = true; // keyboard focus keeps it open
+            render();
+            ready();
+          }, { rootMargin: '-96px 0px 0px 0px', threshold: [0, 0.01] }).observe(hero);
+        } else { render(); ready(); }
+
+        /* hover (mouse only), with a short collapse delay so moving between items never flickers */
+        pill.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') expand(); });
+        pill.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') collapseSoon(); });
+
+        /* click / tap: expands the compact island without navigating; a click on the bar background toggles it */
+        pill.addEventListener('click', (e) => {
+          if ((e.target as Element).closest('.nav, .pill__right')) return;   // nav items and the Menu button handle themselves
+          if (header.dataset.nav === 'compact') {
+            e.preventDefault(); e.stopPropagation();
+            expand();
+            if (mobile.matches) setMobile(true);
+          } else if ((e.target as Element).closest('.logo') && performance.now() - lastExpandAt < 600) {
+            e.preventDefault();      // clicking the island itself (right after it opened) must not navigate
+          } else if (e.target === pill && pastHero) {
+            collapse(true);
+          }
+        });
+
+        /* tap or click outside closes everything */
+        document.addEventListener('pointerdown', (e) => {
+          if (header.contains(e.target as Node)) return;
+          closeDropdown();
+          if (pastHero && expanded) collapse(true); else if (mobileOpen()) setMobile(false);
+        });
+
+        /* keyboard focus keeps it open; leaving the header (and the pointer) closes it */
+        header.addEventListener('focusin', () => { if (kbFocusInside()) expand(); });
+        header.addEventListener('focusout', () => {
+          clearTimeout(timer);
+          timer = window.setTimeout(() => { if (!kbFocusInside() && !pill.matches(':hover')) collapse(); }, 200);
+        });
+
+        /* Services dropdown: keeps hover and focus behaviour, adds click/tap and Escape */
+        ddBtn?.addEventListener('click', () => {
+          const open = dd!.classList.toggle('is-open');
+          ddBtn.setAttribute('aria-expanded', String(open));
+        });
+        dd?.addEventListener('pointerenter', () => dd.classList.remove('force-closed'));
+        dd?.addEventListener('focusin', () => dd.classList.remove('force-closed'));
+
+        /* mobile menu button */
+        menuBtn?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const open = !mobileOpen();
+          setMobile(open);
+          if (open) expand(); else collapse(true);
+        });
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key !== 'Escape') return;
+          dd?.classList.add('force-closed');
+          closeDropdown();
+          setMobile(false);
+          if (kbFocusInside()) (document.activeElement as HTMLElement).blur();
+          collapse(true);
+        });
+      }
+    </script>
+    <script>
+      const els = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: 0.1 });
+        els.forEach((el) => io.observe(el));
+      } else els.forEach((el) => el.classList.add('in'));
+    </script>
+  </body>
+</html>

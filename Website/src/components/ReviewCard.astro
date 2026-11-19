@@ -1,0 +1,23 @@
+---
+import type { DisplayReview } from '../data/reviews';
+interface Props { review: DisplayReview; }
+const { review: r } = Astro.props;
+const full = Math.round(r.rating);
+const showGoogle = r.authentic && r.source === 'google';
+---
+<article class={`rev-card${r.sample ? ' rev-card--sample' : ''}`}>
+  <header class="rev-card__top">
+    <span class="rev-card__stars" role="img" aria-label={`${full} out of 5 stars`}>
+      {[1, 2, 3, 4, 5].map((i) => (
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class={i <= full ? 'on' : 'off'}><path d="M12 2.5l2.95 6.2 6.8.86-5 4.7 1.28 6.74L12 17.6l-6.03 3.4 1.28-6.74-5-4.7 6.8-.86L12 2.5Z" /></svg>
+      ))}
+    </span>
+    {showGoogle && <span class="rev-card__src"><img src="/images/marks/google-g.svg" width="16" height="16" alt="" />Google review</span>}
+    {r.sample && <span class="rev-card__tag">Sample</span>}
+  </header>
+  <blockquote class="rev-card__text"><p>{r.text}</p></blockquote>
+  <footer class="rev-card__foot">
+    <strong class="rev-card__name">{r.name}</strong>
+    {r.date && <time class="rev-card__date">{r.date}</time>}
+  </footer>
+</article>

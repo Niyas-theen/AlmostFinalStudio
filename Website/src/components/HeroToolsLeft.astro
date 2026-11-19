@@ -1,0 +1,33 @@
+---
+/** Identity side: pen-tool canvas, swatch card, glossy pen tile, type tile. */
+---
+<svg class="hx hx--l" viewBox="0 0 270 220" role="img" aria-label="Design tools: a pen tool curve on a canvas, a colour swatch card and a type specimen">
+  <defs>
+    <linearGradient id="l-green" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8fd3ff" /><stop offset="1" stop-color="#075392" /></linearGradient>
+    <linearGradient id="l-gloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6" /><stop offset="1" stop-color="#fff" stop-opacity="0" /></linearGradient>
+    <filter id="l-sh" x="-30%" y="-30%" width="170%" height="180%"><feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#000" flood-opacity=".4" /></filter>
+  </defs>
+  <g filter="url(#l-sh)"><rect x="14" y="22" width="196" height="134" rx="18" fill="#ffffff" fill-opacity=".12" stroke="#fff" stroke-opacity=".35" /></g>
+  <g stroke="#fff" stroke-opacity=".08">{[50, 78, 106, 134].map((y) => <path d={`M22 ${y}H202`} />)}{[48, 82, 116, 150, 184].map((x) => <path d={`M${x} 30V148`} />)}</g>
+  <g class="hx__float hx__float--a">
+    <path d="M36 124 C70 38 112 38 140 92 S182 132 192 62" fill="none" stroke="#8fd3ff" stroke-width="4" stroke-linecap="round" />
+    <g stroke="#fff" stroke-opacity=".65" stroke-dasharray="3 3" stroke-width="1.5"><path d="M36 124 L70 38" /><path d="M140 92 L112 38" /><path d="M192 62 L182 132" /></g>
+    <g fill="#fff" fill-opacity=".9"><circle cx="70" cy="38" r="3.5" /><circle cx="112" cy="38" r="3.5" /><circle cx="182" cy="132" r="3.5" /></g>
+    <g fill="#fff" stroke="#8fd3ff" stroke-width="2"><rect x="31" y="119" width="10" height="10" /><rect x="135" y="87" width="10" height="10" /><rect x="187" y="57" width="10" height="10" /></g>
+  </g>
+  <g transform="translate(150 106) rotate(8 32 32)"><g class="hx__float hx__float--b">
+    <g filter="url(#l-sh)"><rect width="66" height="66" rx="19" fill="url(#l-green)" /></g>
+    <rect x="2" y="2" width="62" height="32" rx="17" fill="url(#l-gloss)" />
+    <path d="M33 14 L45 38 L33 52 L21 38Z" fill="#fff" /><circle cx="33" cy="36" r="4.5" fill="#075392" /><path d="M33 14 V32" stroke="#075392" stroke-width="2.5" />
+  </g></g>
+  <g transform="translate(150 -2)"><g class="hx__float hx__float--c">
+    <g filter="url(#l-sh)"><rect width="104" height="46" rx="15" fill="#fff" /></g>
+    {['#0a2a52', '#075392', '#2a79bd', '#8fd3ff', '#e63946'].map((c, i) => <circle cx={20 + i * 16} cy="23" r="7" fill={c} />)}
+  </g></g>
+  <g transform="translate(0 150)"><g class="hx__float hx__float--c">
+    <g filter="url(#l-sh)"><rect width="60" height="60" rx="17" fill="#fff" /></g>
+    <text x="30" y="40" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="28" font-weight="700" fill="#0b263d">Aa</text>
+    <circle cx="48" cy="12" r="4" fill="#e63946" />
+  </g></g>
+  <path d="M236 168 l3 9 9 3 -9 3 -3 9 -3 -9 -9 -3 9 -3z" fill="#ffd35c" class="xmas__star-tw" />
+</svg>

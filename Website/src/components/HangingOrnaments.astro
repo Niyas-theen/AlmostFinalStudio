@@ -1,0 +1,31 @@
+---
+/** Blue, silver and white hanging baubles. `edge="top"` hangs from the top of the host; `edge="below"` hangs from its bottom edge. */
+interface Item { left?: string; right?: string; len: number; kind: 'navy' | 'sky' | 'silver' | 'frost'; size?: number; delay?: number; wide?: boolean; }
+interface Props { items: Item[]; edge?: 'top' | 'below'; rail?: boolean; }
+const { items, edge = 'top', rail = false } = Astro.props;
+const pal = {
+  navy: { a: '#4c8ae8', b: '#0a2c6b', band: '#c9d6e6' },
+  sky: { a: '#cfe9ff', b: '#2f86d8', band: '#ffffff' },
+  silver: { a: '#ffffff', b: '#9aa6b4', band: '#5d86c4' },
+  frost: { a: '#ffffff', b: '#cddcee', band: '#4c8ae8' },
+} as const;
+---
+<div class={`orn-layer orn-layer--${edge}${rail ? ' orn-layer--rail' : ''}`} aria-hidden="true">
+  {items.map((it, n) => {
+    const c = pal[it.kind]; const s = it.size ?? 38; const id = `orn-${edge}-${n}-${it.kind}`;
+    return (
+      <div class={`orn${it.wide ? ' orn--wide' : ''}`} style={`${it.left ? `left:${it.left}` : `right:${it.right}`};animation-delay:${it.delay ?? 0}s`}>
+        <i class="orn__pin"></i>
+        <span class="orn__string" style={`height:${it.len}px`}></span>
+        <svg width={s} height={Math.round(s * 1.22)} viewBox="0 0 46 56">
+          <defs><radialGradient id={id} cx=".35" cy=".3" r=".85"><stop offset="0" stop-color={c.a} /><stop offset="1" stop-color={c.b} /></radialGradient></defs>
+          <rect x="17" y="0" width="12" height="9" rx="2" fill="#dfe4ea" /><rect x="15" y="7" width="16" height="4" rx="2" fill="#aab3bd" />
+          <circle cx="23" cy="33" r="21" fill={`url(#${id})`} />
+          <path d="M3 31 q20 9 40 0" fill="none" stroke={c.band} stroke-width="3" stroke-opacity=".85" />
+          <g stroke={it.kind === 'sky' || it.kind === 'navy' ? '#fff' : '#2f6fc0'} stroke-width="1.4" stroke-linecap="round" opacity=".9"><path d="M23 38 V50 M17.5 41 L28.5 47 M28.5 41 L17.5 47" /></g>
+          <ellipse cx="15" cy="23" rx="5" ry="8" fill="#fff" opacity=".5" transform="rotate(25 15 23)" />
+        </svg>
+      </div>
+    );
+  })}
+</div>

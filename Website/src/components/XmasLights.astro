@@ -1,0 +1,21 @@
+---
+/** A string of twinkling bulbs draped in arches. */
+interface Props { arches?: number; sag?: number; class?: string; }
+const { arches = 3, sag = 46, class: cls = '' } = Astro.props;
+const W = 1200, H = sag + 30, A = W / arches;
+const cols = ['#8fd3ff', '#ffffff', '#4c8ae8', '#ffd35c'];
+const q = (a: number[], b: number[], c: number[], t: number) => [(1 - t) ** 2 * a[0] + 2 * (1 - t) * t * b[0] + t ** 2 * c[0], (1 - t) ** 2 * a[1] + 2 * (1 - t) * t * b[1] + t ** 2 * c[1]];
+const segs = Array.from({ length: arches }, (_, i) => [[i * A, 6], [i * A + A / 2, 6 + sag * 2], [(i + 1) * A, 6]]);
+const bulbs = segs.flatMap(([a, b, c], si) => Array.from({ length: 7 }, (_, i) => { const [x, y] = q(a, b, c, (i + 1) / 8); return { x, y: y + 5, c: cols[(i + si) % 4], d: ((i + si * 3) * 0.41) % 2 }; }));
+---
+<svg class={`xlights ${cls}`} viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMin slice" aria-hidden="true">
+  {segs.map(([a, b, c]) => <path d={`M${a} Q${b} ${c}`} fill="none" stroke="#12301f" stroke-width="2.5" />)}
+  {bulbs.map((b) => (
+    <g class="xmas__bulb" style={`animation-delay:${-b.d}s`}>
+      <circle cx={b.x} cy={b.y} r="12" fill={b.c} opacity=".28" />
+      <rect x={b.x - 3} y={b.y - 10} width="6" height="6" rx="1" fill="#12301f" />
+      <ellipse cx={b.x} cy={b.y + 1} rx="5" ry="7.5" fill={b.c} />
+      <ellipse cx={b.x - 1.6} cy={b.y - 2} rx="1.4" ry="2.4" fill="#fff" opacity=".7" />
+    </g>
+  ))}
+</svg>
